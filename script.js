@@ -94,12 +94,12 @@ let city;
             const ipAddress = data.ip;
 
             // Fetch geolocation data using the obtained IP address
-            fetch(`http://ip-api.com/json/${ipAddress}`)
+            fetch(`https://ipapi.co/${ipAddress}/json/`)
                 .then(response => response.json())
                 .then(async data => {
                     console.log(data);
-                    const x = data.lat;
-                    const y = data.lon;
+                    const x = data.latitude;
+                    const y = data.longitude;
                     city = data.city;
                     //set location to result of https://api.weather.gov/points/' + x + ',' + y
                     //set weatherLocation to result of location.properties.gridId + '/' + location.properties.gridX + ',' + location.properties.gridY
