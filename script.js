@@ -18,8 +18,7 @@ document.getElementById('button3').addEventListener('click', function() {
 //document.getElementById('afterlogin').hidden = true;
 
 if(visitorName == null) {
-    document.getElementById('heading').textContent = 'Hello ------';
-    buttonClicked(true);
+    
 } else {
     document.getElementById('loginbutton').textContent = 'Change Name';
     buttonClicked(false);
