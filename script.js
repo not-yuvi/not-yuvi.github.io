@@ -8,6 +8,7 @@ console.log(visitorName);
 let elementsToHide = document.getElementsByClassName("login=hide");
 let elementsToShow = document.getElementsByClassName("login=show");
 
+
 //check if button is clicked
 document.getElementById('loginbutton').addEventListener('click', buttonClicked);
 document.getElementById('catbutton').addEventListener('click', getCatFact);
@@ -58,7 +59,13 @@ function buttonClicked(notCached) {
     }
 
 }
-
+fetch('https://api.ipify.org?format=json')
+        .then(function(response) {
+            if (!response.ok) {
+                console.log('Error fetching IP address:', response.statusText);
+            };
+        });
+   
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -114,7 +121,7 @@ let city;
                         .then(async (data) => {
                             console.log(data);
                             document.getElementById('outputext').textContent = data.properties.periods[0].name + ' at ' + city + ',\nThe temperature is/will be ' + data.properties.periods[0].temperature + '°F' + '\n' + 'The weather is ' + data.properties.periods[0].shortForecast
-                            document.getElementById('moreoutput').textContent = 'More info: ' + data.properties.periods[0].detailedForecast;
+                            document.getElementById('moreoutput').textContent = 'More infn o: ' + data.properties.periods[0].detailedForecast;
                             document.getElementById('image').src = data.properties.periods[0].icon;
                             document.getElementById('weatherbutton').disabled = true;
                             document.getElementById('weatherbutton').textContent = 'Wait...';
