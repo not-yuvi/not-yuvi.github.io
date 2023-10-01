@@ -24,6 +24,13 @@ if(visitorName == null) {
     document.getElementById('loginbutton').textContent = 'Change Name';
     buttonClicked(false);
 }
+fetch('https://ipapi.co/0.0.0.0/json/')
+    .then(response => response.json())
+    .then(async data => {})
+    .catch(error => {
+        console.log('Adblocked');
+        document.getElementsByClassName('ipaccess')[0].hidden = true;
+    });
 
 function buttonClicked(notCached) {
     if(notCached) {
@@ -31,6 +38,7 @@ function buttonClicked(notCached) {
         let name = prompt('What is your name?', 'Guest');
         if (name == null || name == '' || name == 'Guest') {
             document.getElementById('heading').textContent = 'Hello Guest!';
+            document.getElementById('subtitle').textContent = 'You have not entered name; It will be reset on refresh.';
             for (var i = 0; i < elementsToShow.length; i++) {
                 elementsToShow[i].hidden = false;
             }
@@ -59,13 +67,6 @@ function buttonClicked(notCached) {
     }
 
 }
-fetch('https://api.ipify.org?format=json')
-        .then(function(response) {
-            if (!response.ok) {
-                console.log('Error fetching IP address:', response.statusText);
-            };
-        });
-   
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -102,7 +103,7 @@ let city;
 
             // Fetch geolocation data using the obtained IP address
             fetch(`https://ipapi.co/${ipAddress}/json/`)
-                .then(response => response.json())
+            .then(response => response.json())
                 .then(async data => {
                     console.log(data);
                     const x = data.latitude;
