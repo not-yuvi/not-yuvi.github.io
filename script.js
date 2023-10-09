@@ -24,7 +24,7 @@ if(visitorName == null) {
     document.getElementById('loginbutton').textContent = 'Change Name';
     buttonClicked(false);
 }
-fetch('https://ipinfo.io/0.0.0.0?token=be9fae87a72755')
+fetch('https://api.weatherapi.com/v1/current.json?key=2d9e857fb6c34f7999544038230110&q=1.1.1.1&aqi=no')
     .then(response => response.json())
     .then(async data => {})
     .catch(error => {
@@ -102,34 +102,40 @@ let city;
             const ipAddress = data.ip;
 
             // Fetch geolocation data using the obtained IP address
-            fetch(`-`)
+            fetch(`https://api.weatherapi.com/v1/current.json?key=2d9e857fb6c34f7999544038230110&q=${ipAddress}&aqi=no`)
             .then(response => response.json())
                 .then(async data => {
                     console.log(data);
-                    const x = data.loc.split(',')[0];
-                    const y = data.loc.split(',')[1];
-                    city = data.city;
+                    const lat = data.location.lat;
+                    const lon = data.location.lon;
+                    const country = data.location.country;
                     //set location to result of https://api.weather.gov/points/' + x + ',' + y
                     //set weatherLocation to result of location.properties.gridId + '/' + location.properties.gridX + ',' + location.properties.gridY
-                    let location = await fetch('https://api.weather.gov/points/' + x + ',' + y);
-                    let locationData = await location.json();
-                    console.log(locationData);
-                    weatherLocation = locationData.properties.gridId + '/' + locationData.properties.gridX + ',' + locationData.properties.gridY;
-                    console.log(weatherLocation);
-
-                    fetch('https://api.weather.gov/gridpoints/' + weatherLocation + '/forecast')
-                        .then((response) => response.json())
-                        .then(async (data) => {
-                            console.log(data);
-                            document.getElementById('outputext').textContent = data.properties.periods[0].name + ' at ' + city + ',\nThe temperature is/will be ' + data.properties.periods[0].temperature + '°F' + '\n' + 'The weather is ' + data.properties.periods[0].shortForecast
-                            document.getElementById('moreoutput').textContent = 'More infn o: ' + data.properties.periods[0].detailedForecast;
-                            document.getElementById('image').src = data.properties.periods[0].icon;
-                            document.getElementById('weatherbutton').disabled = true;
-                            document.getElementById('weatherbutton').textContent = 'Wait...';
-                            await wait(5000);
-                            document.getElementById('weatherbutton').disabled = false;
-                            document.getElementById('weatherbutton').textContent = 'Refresh Forecast';
-                        });
+                    if (country == 'United States of America') {
+                        let location = await fetch('https://api.weather.gov/points/' + lat + ',' + lon);
+                        let locationData = await location.json();
+                        console.log(locationData);
+                        weatherLocation = locationData.properties.gridId + '/' + locationData.properties.gridX + ',' + locationData.properties.gridY;
+                        console.log(weatherLocation);
+                    
+                        fetch('https://api.weather.gov/gridpoints/' + weatherLocation + '/forecast')
+                            .then((response) => response.json())
+                            .then(async (data) => {
+                                console.log(data);
+                                document.getElementById('outputtext').textContent = data.properties.periods[0].name + ' at ' + city + ', \n The temperature is/will be ' + data.properties.periods[0].temperature + '°F' + '\n' + 'The weather is ' + data.properties.periods[0].shortForecast
+                                document.getElementById('moreoutput').textContent = 'More info: ' + data.properties.periods[0].detailedForecast;
+                                document.getElementById('image').src = data.properties.periods[0].icon;
+                                // document.getElementById('weatherbutton').disabled = true;
+                                // document.getElementById('weatherbutton').textContent = 'Wait...';
+                                // await wait(5000);
+                                // document.getElementById('weatherbutton').disabled = false;
+                                // document.getElementById('weatherbutton').textContent = 'Refresh Forecast';
+                            });
+                    } else {
+                        let weather = data.current;
+                        document.getElementById('outputtext').textContent = 'Currently at ' + data.location.name + ', \n The temperature is ' + weather.temp_c + '°C/' + weather.temp_f + '°F' + '\n' + 'The weather is ' + weather.condition.text;
+                        document.getElementById('image').src = weather.condition.icon;
+                    }
                 })
                 .catch(error => {
                     console.log('Error fetching geolocation data:', error);
