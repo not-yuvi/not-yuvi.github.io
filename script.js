@@ -24,7 +24,7 @@ if(visitorName == null) {
     document.getElementById('loginbutton').textContent = 'Change Name';
     buttonClicked(false);
 }
-fetch('https://ipapi.co/0.0.0.0/json/')
+fetch('https://ipinfo.io/0.0.0.0?token=be9fae87a72755')
     .then(response => response.json())
     .then(async data => {})
     .catch(error => {
@@ -76,7 +76,7 @@ function getCatFact() {
     fetch('https://meowfacts.herokuapp.com/')
         .then((response) => response.json())
         .then(async (data) => {
-            document.getElementById('outputext').textContent = data.data[0];
+            document.getElementById('outputtext').textContent = data.data[0];
             document.getElementById('moreoutput').textContent = '';
             fetch('https://cataas.com/cat?width=100&height=100')
                 .then((response) => response.blob())
@@ -102,12 +102,12 @@ let city;
             const ipAddress = data.ip;
 
             // Fetch geolocation data using the obtained IP address
-            fetch(`https://ipapi.co/${ipAddress}/json/`)
+            fetch(`-`)
             .then(response => response.json())
                 .then(async data => {
                     console.log(data);
-                    const x = data.latitude;
-                    const y = data.longitude;
+                    const x = data.loc.split(',')[0];
+                    const y = data.loc.split(',')[1];
                     city = data.city;
                     //set location to result of https://api.weather.gov/points/' + x + ',' + y
                     //set weatherLocation to result of location.properties.gridId + '/' + location.properties.gridX + ',' + location.properties.gridY
